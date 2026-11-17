@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ribofun Learn Tracker</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#140d0f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ribofun">
+<style>
+:root{--m:#893942;--p:#C97984;--l:#D4DA94;--g:#5D6623;--bg:#faf7f6;--card:#fff;--tx:#1a1214;--mu:#7a6b6e;--bd:#eadfe0;--sb:#140d0f;--ac:#893942;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#120c0e;--card:#1d1417;--tx:#f5eeee;--mu:#b3a2a5;--bd:#33262a;--ac:#C97984}}
+:root[data-theme="dark"]{--bg:#120c0e;--card:#1d1417;--tx:#f5eeee;--mu:#b3a2a5;--bd:#33262a;--ac:#C97984}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--sb);z-index:30}
+#sb{position:fixed;top:env(safe-area-inset-top,0px);bottom:0;left:0;width:236px;background:var(--sb);color:#eee;padding:20px 14px;display:flex;flex-direction:column;gap:6px;z-index:20;transition:transform .25s}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}.brand b{font-size:16px;letter-spacing:.3px}.brand small{display:block;color:#a99;font-size:11px}
+.logo{width:42px;height:42px;border-radius:12px;background:#1a1012;border:1px solid #3a2328;flex:none}
+#sb a{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;color:#d9c9cb;text-decoration:none;cursor:pointer;font-weight:500}
+#sb a:hover{background:#25181b}#sb a.on{background:var(--m);color:#fff}
+#sb .sp{flex:1}
+main{margin-left:236px;padding:28px 32px 60px;max-width:1100px}
+#top{display:none}
+h1{font-size:26px;margin:0 0 4px}.sub{color:var(--mu);margin:0 0 22px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:18px}
+.stat b{font-size:30px;display:block;color:var(--ac)}.stat span{color:var(--mu);font-size:13px}
+h2{font-size:16px;margin:0 0 12px}
+input,select,button,textarea{font:inherit;color:inherit}
+input,select{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:9px 11px;min-width:0}
+.btn{background:var(--m);color:#fff;border:0;border-radius:10px;padding:9px 16px;cursor:pointer;font-weight:600}
+.btn.s{background:var(--l);color:#2a2e10}.btn.g{background:transparent;color:var(--mu);border:1px solid var(--bd)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>input{flex:1;min-width:120px}
+.mt{margin-top:16px}
+.item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}.item:last-child{border:0}
+.item .t{flex:1}.done .t{text-decoration:line-through;color:var(--mu)}
+.pill{font-size:11px;padding:3px 9px;border-radius:99px;background:var(--l);color:#2a2e10;font-weight:600}
+.pill.r{background:var(--m);color:#fff}.pill.p{background:var(--p);color:#2a0d12}
+.bar{height:9px;border-radius:9px;background:var(--bd);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--p),var(--g))}
+.chart{display:flex;gap:10px;align-items:flex-end;height:120px}.chart div{flex:1;text-align:center;font-size:11px;color:var(--mu)}
+.chart i{display:block;background:var(--p);border-radius:6px 6px 0 0;min-height:3px;margin-bottom:4px}.chart .td i{background:var(--g)}
+.x{background:none;border:0;color:var(--mu);cursor:pointer;font-size:18px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}.cal .h{text-align:center;font-size:12px;color:var(--mu)}
+.d{aspect-ratio:1;border-radius:12px;border:1px solid var(--bd);background:var(--card);cursor:pointer;padding:5px;font-size:13px;position:relative}
+.d.sel{outline:2px solid var(--ac)}.d.now{background:var(--l);color:#2a2e10}.d i{position:absolute;bottom:5px;left:6px;width:7px;height:7px;border-radius:50%;background:var(--m)}.d i+i{left:16px;background:var(--g)}
+.tabs{display:flex;gap:6px;margin-bottom:12px}.tabs button{border:1px solid var(--bd);background:transparent;border-radius:99px;padding:5px 14px;cursor:pointer}.tabs .on{background:var(--m);color:#fff;border-color:var(--m)}
+#toast{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--sb);color:#fff;border-left:5px solid var(--l);padding:12px 16px;border-radius:12px;max-width:300px;display:none;z-index:40}
+.note{font-size:13px;color:var(--mu)}
+@media (max-width:820px){
+#sb{transform:translateX(-100%)}#sb.open{transform:none}
+main{margin:0;padding:16px 16px 70px}
+#top{display:flex;align-items:center;gap:12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--sb);color:#fff;padding:10px 14px;z-index:15}
+#top button{background:none;border:0;color:#fff;font-size:24px}
+}
+</style></head><body>
+<nav id="sb">
+<div class="brand"><svg class="logo" viewBox="0 0 512 512"><g stroke-linecap="round" stroke-linejoin="round" stroke-width="11" fill="none"><line x1="135.0" y1="230.0" x2="195.6" y2="265.0" stroke="#C97984"/><line x1="195.6" y1="265.0" x2="195.6" y2="335.0" stroke="#C97984"/><line x1="195.6" y1="335.0" x2="135.0" y2="370.0" stroke="#C97984"/><line x1="135.0" y1="370.0" x2="74.4" y2="335.0" stroke="#C97984"/><line x1="74.4" y1="335.0" x2="74.4" y2="265.0" stroke="#C97984"/><line x1="74.4" y1="265.0" x2="135.0" y2="230.0" stroke="#C97984"/><line x1="256.0" y1="230.0" x2="316.6" y2="265.0" stroke="#D4DA94"/><line x1="316.6" y1="265.0" x2="316.6" y2="335.0" stroke="#D4DA94"/><line x1="316.6" y1="335.0" x2="256.0" y2="370.0" stroke="#D4DA94"/><line x1="256.0" y1="370.0" x2="195.4" y2="335.0" stroke="#D4DA94"/><line x1="195.4" y1="335.0" x2="195.4" y2="265.0" stroke="#D4DA94"/><line x1="195.4" y1="265.0" x2="256.0" y2="230.0" stroke="#D4DA94"/><line x1="377.0" y1="230.0" x2="437.6" y2="265.0" stroke="#D4DA94"/><line x1="437.6" y1="265.0" x2="437.6" y2="335.0" stroke="#D4DA94"/><line x1="437.6" y1="335.0" x2="377.0" y2="370.0" stroke="#D4DA94"/><line x1="377.0" y1="370.0" x2="316.4" y2="335.0" stroke="#D4DA94"/><line x1="316.4" y1="335.0" x2="316.4" y2="265.0" stroke="#D4DA94"/><line x1="316.4" y1="265.0" x2="377.0" y2="230.0" stroke="#D4DA94"/><line x1="97.2" y1="267.2" x2="125.5" y2="250.9" stroke="#C97984"/><line x1="182.3" y1="283.6" x2="182.3" y2="316.4" stroke="#C97984"/><line x1="125.5" y1="349.1" x2="97.2" y2="332.8" stroke="#C97984"/><line x1="339.2" y1="267.2" x2="367.5" y2="250.9" stroke="#D4DA94"/><line x1="414.8" y1="332.8" x2="386.5" y2="349.1" stroke="#D4DA94"/><line x1="256.0" y1="230.0" x2="216.0" y2="195.0" stroke="#C97984"/><line x1="216.0" y1="195.0" x2="256.0" y2="160.0" stroke="#C97984"/><line x1="256.0" y1="160.0" x2="216.0" y2="125.0" stroke="#C97984"/><line x1="216.0" y1="125.0" x2="256.0" y2="90.0" stroke="#C97984"/><line x1="256.0" y1="90.0" x2="216.0" y2="55.0" stroke="#C97984"/><line x1="216.0" y1="195.0" x2="188.0" y2="173.0" stroke="#D4DA94"/><line x1="216.0" y1="125.0" x2="188.0" y2="103.0" stroke="#D4DA94"/><line x1="256.0" y1="160.0" x2="290.0" y2="140.0" stroke="#D4DA94"/><line x1="135.0" y1="230.0" x2="105.0" y2="200.0" stroke="#C97984"/><line x1="74.4" y1="335.0" x2="44.4" y2="365.0" stroke="#C97984"/><line x1="437.6" y1="335.0" x2="471.6" y2="331.0" stroke="#D4DA94"/><line x1="377.0" y1="370.0" x2="407.0" y2="392.0" stroke="#D4DA94"/></g><rect x="241.0" y="215.0" width="30" height="30" rx="7" fill="#5D6623"/><rect x="241.0" y="355.0" width="30" height="30" rx="7" fill="#5D6623"/><rect x="392.0" y="377.0" width="30" height="30" rx="7" fill="#5D6623"/><rect x="456.6" y="316.0" width="30" height="30" rx="7" fill="#5D6623"/></svg><div><b>Ribofun Learn</b><small>studio tracker</small></div></div>
+<a data-p="dash">&#9638; Dashboard</a><a data-p="tasks">&#10003; My Tasks</a><a data-p="proj">&#128193; Project Management</a><a data-p="cal">&#128197; My Calendar</a><a data-p="road">&#128506; Roadmap Belajar</a>
+<div class="sp"></div><a data-p="set">&#9881; Pengaturan</a></nav>
+<div id="top"><button onclick="sb.classList.toggle('open')" aria-label="Menu">&#9776;</button><b>Ribofun Learn</b></div>
+<main id="m"></main><div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),sb=$('#sb');
+const pad=n=>String(n).padStart(2,'0'),ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const today=()=>ymd(new Date()),uid=()=>Date.now()+Math.floor(Math.random()*999);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=s=>s?new Date(s+'T00:00').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}):'-';
+const RM=[['Fase 0: Persiapan alat (1-2 hari)',['Install VS Code (editor kode) + ekstensi Live Server','Install Node.js versi LTS, cek dengan node -v dan npm -v','Install Git, cek dengan git --version','Buat akun GitHub (gratis), set username dan email di Git','Install Android Studio hanya untuk SDK dan emulator (gratis)','Aktifkan Developer Options + USB Debugging di HP Android','Buat akun Google khusus studio untuk Firebase dan Play Console']],['Fase 1: HTML dan CSS (1-2 minggu)',['Struktur HTML: head, body, div, section, nav, main','Elemen form: input, select, button, label, checkbox','Atribut penting: id, class, data-*, type, placeholder','CSS selector: class, id, turunan, pseudo (:hover)','Box model: margin, padding, border, box-sizing','Flexbox: row, column, gap, justify-content, align-items','CSS Grid: grid-template-columns, auto-fit, minmax','CSS variables (--warna) dan membuat tema warna','Media query: layout HP vs laptop (@media max-width)','Dark mode dengan prefers-color-scheme','Latihan: tiru satu layar desain Figma jadi HTML']],['Fase 2: JavaScript (3-4 minggu)',['Variabel let/const, tipe data, operator','Fungsi biasa dan arrow function','Percabangan if/else dan perulangan for/while','Array dan method: push, filter, map, find, some, reduce, sort','Objek dan JSON: JSON.stringify dan JSON.parse','DOM: querySelector, innerHTML, addEventListener','Template literal untuk membuat tampilan dari data','Date: tanggal, jam, format, hitung selisih hari','localStorage: simpan dan baca data (selalu pakai try/catch)','Async: setTimeout, setInterval, Promise, async/await','fetch untuk mengambil data dari internet','Debugging: console.log dan DevTools (tab Console, Elements)','Beda Apps Script dan JS browser: tidak ada SpreadsheetApp atau UrlFetchApp']],['Fase 3: Git dan GitHub (3-4 hari)',['git init, add, commit: simpan versi kode','git status dan git log: lihat riwayat','Buat repository GitHub dan git push','Branch dan merge dasar','File .gitignore (jangan commit keystore dan password)','GitHub Pages: host halaman web gratis']],['Fase 4: Bedah kode Ribofun Tracker (1-2 minggu)',['Pahami alur: data (S), fungsi render, lalu event klik','Ubah warna di :root dan lihat hasilnya','Tambah field baru di tugas (mis. prioritas)','Tambah halaman baru lewat objek V dan menu sidebar','Pahami save() dan cara data dibaca dari localStorage','Pahami fungsi chk(): cara kerja pengingat','Bikin fitur sendiri, mis. timer Pomodoro']],['Fase 5: Jadi aplikasi Android dengan Capacitor (1-2 minggu)',['Dasar npm: npm init, npm install, folder node_modules','Install Capacitor: core, cli, android','npx cap init dan atur appId (mis. com.ribofun.learn)','npx cap add android, lalu npx cap sync setiap kode berubah','Buka proyek di Android Studio, jalankan di HP lewat USB','Plugin Local Notifications: izin, jadwalkan, batalkan','Ikon dan splash screen (pakai logo Ribofun)','Atur nama app, versionCode, versionName','Tes: aplikasi ditutup, notifikasi tetap muncul']],['Fase 6: Firebase (2 minggu)',['Buat project Firebase (paket Spark gratis)','Authentication: login email atau Google','Firestore: collection, document, tambah/baca/ubah/hapus','Realtime listener supaya data sinkron antar HP','Security Rules: hanya pemilik yang boleh baca dan tulis datanya','Cloud Messaging (FCM): push notifikasi ke HP','Belajar bareng mbakmu: minta dia jelaskan struktur datanya']],['Fase 7: Rilis ke Play Store (1-2 minggu)',['Buat keystore dan BACKUP di 2 tempat (jangan masuk GitHub)','Build Signed Bundle (AAB) di Android Studio','Daftar Play Console (USD 25) dan verifikasi identitas','Store listing: ikon 512x512, feature graphic 1024x500, screenshot','Kebijakan privasi (URL) dan formulir Data Safety','Rating konten dan target audiens','Closed testing: cek syarat tester terbaru di dashboard','Rilis produksi, lalu pantau review dan crash di Play Console','Update berikutnya: naikkan versionCode, build ulang, upload']],['Fase 8: Game dengan Godot (jalur terpisah, 2-3 bulan)',['Scene, Node, dan Inspector','GDScript: variabel, fungsi, signal','Input, gerak, collision (Area2D, CharacterBody2D)','UI: Control, Button, Label, menu utama','Simpan skor dan pengaturan','Audio: musik dan SFX gratis (cek lisensi)','Export Android (AAB) dan tes di HP','Game kecil pertama sampai rilis']]];
+let S={tasks:[],proj:[],ev:[],log:[],road:{},rem:30,daily:'19:00',nt:{},theme:''};
+try{const r=localStorage.getItem('ribofun');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+if(!S.proj.length&&!S.tasks.length){S.proj=[{id:1,n:'Game pertama (Godot)',d:'Latihan: game sederhana lengkap menu + skor',pf:'Godot',db:'Tidak ada',st:'Belajar',pr:10,up:today()}];S.tasks=[{id:2,t:'Install Godot dan buat project pertama',due:today(),pj:1,dn:0}]}
+const save=()=>{try{localStorage.setItem('ribofun',JSON.stringify(S))}catch(e){}};
+const theme=()=>{if(S.theme)document.documentElement.dataset.theme=S.theme;else delete document.documentElement.dataset.theme};theme();
+let page='dash',tf='all',cm=new Date(),sel=today();cm.setDate(1);
+function toast(t,b){const e=$('#toast');e.innerHTML='<b>'+esc(t)+'</b><br>'+esc(b||'');e.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>e.style.display='none',6000)}
+function notify(t,b){toast(t,b);try{if('Notification' in window&&Notification.permission==='granted')new Notification(t,{body:b})}catch(e){}}
+function mins(d){return S.log.filter(l=>l.d===d).reduce((a,l)=>a+l.m,0)}
+function streak(){let n=0,d=new Date();if(!mins(ymd(d)))d.setDate(d.getDate()-1);while(mins(ymd(d))){n++;d.setDate(d.getDate()-1)}return n}
+function rp(){const a=RM.flatMap((g,i)=>g[1].map((_,j)=>i+'-'+j));return Math.round(a.filter(k=>S.road[k]).length/a.length*100)}
+const pn=id=>(S.proj.find(p=>p.id==id)||{}).n||'';
+function dash(){const wk=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return{l:d.toLocaleDateString('id-ID',{weekday:'short'}),m:mins(ymd(d)),t:i==6}});const mx=Math.max(30,...wk.map(w=>w.m));
+const up=[...S.tasks.filter(t=>!t.dn&&t.due).map(t=>({d:t.due,t:t.t,k:'Tugas'})),...S.ev.filter(e=>e.d>=today()).map(e=>({d:e.d,t:e.t||'',n:e.n,k:e.k}))].map(x=>({...x,t:x.n||x.t})).sort((a,b)=>a.d.localeCompare(b.d)).slice(0,6);
+return`<h1>Halo, developer!</h1><p class="sub">Pantau belajarmu dari nol sampai rilis di Play Store.</p>
+<div class="grid"><div class="card stat"><b>${S.tasks.filter(t=>!t.dn).length}</b><span>Tugas aktif</span></div><div class="card stat"><b>${S.proj.length}</b><span>Proyek</span></div><div class="card stat"><b>${wk.reduce((a,w)=>a+w.m,0)}</b><span>Menit belajar (7 hari)</span></div><div class="card stat"><b>${streak()}</b><span>Hari beruntun</span></div></div>
+<div class="grid mt" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+<div class="card"><h2>Catat sesi belajar</h2><div class="row"><input id="lt" placeholder="Topik (mis. Godot signal)"><input id="lm" type="number" min="1" placeholder="Menit" style="max-width:90px"><button class="btn" onclick="addLog()">Catat</button></div>
+<div class="chart mt">${wk.map(w=>`<div class="${w.t?'td':''}"><i style="height:${w.m/mx*90}px"></i>${w.l}</div>`).join('')}</div></div>
+<div class="card"><h2>Akan datang</h2>${up.map(u=>`<div class="item"><span class="t">${esc(u.t)}</span><span class="pill ${u.k=='deadline'||u.k=='Tugas'?'r':''}">${u.k}</span><span class="note">${fmt(u.d)}</span></div>`).join('')||'<p class="note">Belum ada jadwal.</p>'}</div></div>
+<div class="card mt"><h2>Progres roadmap: ${rp()}%</h2><div class="bar"><i style="width:${rp()}%"></i></div></div>`}
+function tasks(){const L=S.tasks.filter(t=>tf=='all'||(tf=='open'?!t.dn:t.dn));
+return`<h1>My Tasks</h1><p class="sub">Daftar yang harus dikerjakan.</p><div class="card"><div class="row"><input id="tt" placeholder="Tugas baru"><input id="td" type="date"><select id="tp"><option value="">Tanpa proyek</option>${S.proj.map(p=>`<option value="${p.id}">${esc(p.n)}</option>`).join('')}</select><button class="btn" onclick="addTask()">Tambah</button></div></div>
+<div class="tabs mt">${[['all','Semua'],['open','Aktif'],['done','Selesai']].map(a=>`<button class="${tf==a[0]?'on':''}" onclick="tf='${a[0]}';go()">${a[1]}</button>`).join('')}</div>
+<div class="card">${L.map(t=>`<div class="item ${t.dn?'done':''}"><input type="checkbox" ${t.dn?'checked':''} onchange="tg(${t.id})"><span class="t">${esc(t.t)}<br><span class="note">${pn(t.pj)}</span></span>${t.due?`<span class="pill ${!t.dn&&t.due<today()?'r':''}">${fmt(t.due)}</span>`:''}<button class="x" onclick="dt(${t.id})">&times;</button></div>`).join('')||'<p class="note">Kosong.</p>'}</div>`}
+function proj(){return`<h1>Project Management</h1><p class="sub">Semua proyek yang pernah kamu buat, beserta update terakhirnya.</p>
+<div class="card"><div class="row"><input id="pn" placeholder="Nama proyek"><input id="pd" placeholder="Deskripsi singkat"></div><div class="row mt"><select id="pf"><option>Godot</option><option>Roblox</option><option>Kodular</option><option>Apps Script</option><option>Flutter</option><option>Web</option></select><select id="pb"><option>Tidak ada</option><option>Firebase</option><option>Google Sheets</option><option>SQLite</option><option>Lainnya</option></select><select id="ps"><option>Belajar</option><option>Dikerjakan</option><option>Testing</option><option>Rilis</option></select><button class="btn" onclick="addProj()">Tambah proyek</button></div></div>
+<div class="grid mt" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">${S.proj.map(p=>`<div class="card"><div class="row" style="justify-content:space-between"><b>${esc(p.n)}</b><span class="pill p">${p.st}</span></div><p class="note">${esc(p.d)}</p><div class="row"><span class="pill">${p.pf}</span><span class="pill">DB: ${p.db}</span></div><div class="bar mt"><i style="width:${p.pr}%"></i></div><div class="row mt"><span class="note" style="flex:1">${p.pr}% &middot; Update: ${fmt(p.up)}</span><button class="btn g" onclick="pr(${p.id},-10)">-10</button><button class="btn s" onclick="pr(${p.id},10)">+10</button><button class="x" onclick="dp(${p.id})">&times;</button></div></div>`).join('')}</div>`}
+function cal(){const y=cm.getFullYear(),mo=cm.getMonth(),off=(cm.getDay()+6)%7,n=new Date(y,mo+1,0).getDate();
+const mark=d=>[S.ev.some(e=>e.d==d),S.tasks.some(t=>t.due==d&&!t.dn)];let c=['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(x=>`<div class="h">${x}</div>`).join('')+'<div></div>'.repeat(off);
+for(let i=1;i<=n;i++){const d=y+'-'+pad(mo+1)+'-'+pad(i),k=mark(d);c+=`<div class="d ${d==sel?'sel':''} ${d==today()?'now':''}" onclick="sel='${d}';go()">${i}${k[0]?'<i></i>':''}${k[1]?'<i></i>':''}</div>`}
+const E=S.ev.filter(e=>e.d==sel).sort((a,b)=>(a.t||'').localeCompare(b.t||''));
+return`<h1>My Calendar</h1><p class="sub">Jadwal belajar dan deadline. Notifikasi muncul sebelum waktu mulai.</p><div class="card"><div class="row" style="justify-content:space-between;margin-bottom:12px"><button class="btn g" onclick="cm.setMonth(cm.getMonth()-1);go()">&lsaquo;</button><b>${cm.toLocaleDateString('id-ID',{month:'long',year:'numeric'})}</b><button class="btn g" onclick="cm.setMonth(cm.getMonth()+1);go()">&rsaquo;</button></div><div class="cal">${c}</div></div>
+<div class="card mt"><h2>${fmt(sel)}</h2><div class="row"><input id="en" placeholder="Judul (mis. Belajar Godot)"><input id="et" type="time"><select id="ek"><option value="belajar">Belajar</option><option value="deadline">Deadline</option></select><button class="btn" onclick="addEv()">Tambah</button></div>
+${E.map(e=>`<div class="item"><span class="t">${esc(e.n)}</span><span class="note">${e.t||''}</span><span class="pill ${e.k=='deadline'?'r':''}">${e.k}</span><button class="x" onclick="de(${e.id})">&times;</button></div>`).join('')}</div>`}
+function road(){return`<h1>Roadmap Belajar</h1><p class="sub">Dari dasar sampai rilis. Progres: ${rp()}%</p><div class="bar" style="margin-bottom:16px"><i style="width:${rp()}%"></i></div>${RM.map((g,i)=>`<div class="card mt"><h2>${g[0]}</h2>${g[1].map((t,j)=>`<label class="item ${S.road[i+'-'+j]?'done':''}"><input type="checkbox" ${S.road[i+'-'+j]?'checked':''} onchange="S.road['${i}-${j}']=this.checked;save();go()"><span class="t">${t}</span></label>`).join('')}</div>`).join('')}`}
+function set(){const np=('Notification' in window)?Notification.permission:'tidak didukung';return`<h1>Pengaturan</h1><p class="sub">Notifikasi dan tampilan.</p>
+<div class="card"><h2>Notifikasi</h2><p class="note">Status izin: <b>${np}</b>. Di versi APK, ini memakai notifikasi bawaan HP.</p><div class="row"><button class="btn" onclick="askN()">Aktifkan notifikasi</button><button class="btn s" onclick="notify('Tes notifikasi','Ribofun Learn berfungsi!')">Tes</button></div>
+<div class="row mt"><label>Ingatkan <input id="sr" type="number" min="0" value="${S.rem}" style="width:80px" onchange="S.rem=+this.value;save()"> menit sebelum jadwal</label></div><div class="row mt"><label>Pengingat belajar harian <input id="sd" type="time" value="${S.daily}" onchange="S.daily=this.value;save()"></label></div></div>
+<div class="card mt"><h2>Tampilan &amp; data</h2><div class="row"><button class="btn g" onclick="S.theme='';save();theme();go()">Otomatis</button><button class="btn g" onclick="S.theme='light';save();theme();go()">Terang</button><button class="btn g" onclick="S.theme='dark';save();theme();go()">Gelap</button></div>
+<div class="row mt"><button class="btn s" onclick="exp()">Ekspor data (JSON)</button><button class="btn g" onclick="if(confirm('Hapus semua data?')){localStorage.removeItem('ribofun');location.reload()}">Reset data</button></div><p class="note">Data tersimpan di perangkat ini. Sinkron antar perangkat (Firebase) jadi pelajaran berikutnya.</p></div>`}
+const V={dash,tasks,proj,cal,road,set};
+function go(){$('#m').innerHTML=V[page]();document.querySelectorAll('#sb a').forEach(a=>a.classList.toggle('on',a.dataset.p==page));sb.classList.remove('open')}
+document.querySelectorAll('#sb a').forEach(a=>a.onclick=()=>{page=a.dataset.p;go();scrollTo(0,0)});
+const gv=id=>$('#'+id).value.trim();
+function addLog(){const m=+gv('lm');if(!m)return toast('Isi menit belajar');S.log.push({d:today(),m,t:gv('lt')});save();go();toast('Tercatat','+'+m+' menit. Streak: '+streak()+' hari')}
+function addTask(){const t=gv('tt');if(!t)return;S.tasks.push({id:uid(),t,due:gv('td'),pj:gv('tp'),dn:0});save();go()}
+function tg(id){const t=S.tasks.find(x=>x.id==id);t.dn=t.dn?0:1;save();go()}
+function dt(id){S.tasks=S.tasks.filter(x=>x.id!=id);save();go()}
+function addProj(){const n=gv('pn');if(!n)return;S.proj.unshift({id:uid(),n,d:gv('pd'),pf:$('#pf').value,db:$('#pb').value,st:$('#ps').value,pr:0,up:today()});save();go()}
+function pr(id,v){const p=S.proj.find(x=>x.id==id);p.pr=Math.max(0,Math.min(100,p.pr+v));p.up=today();if(p.pr==100)p.st='Rilis';save();go()}
+function dp(id){if(confirm('Hapus proyek ini?')){S.proj=S.proj.filter(x=>x.id!=id);save();go()}}
+function addEv(){const n=gv('en');if(!n)return;S.ev.push({id:uid(),n,t:$('#et').value,d:sel,k:$('#ek').value});save();go()}
+function de(id){S.ev=S.ev.filter(x=>x.id!=id);save();go()}
+function askN(){try{Notification.requestPermission().then(go)}catch(e){toast('Browser ini tidak mendukung notifikasi')}}
+function exp(){const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(S,null,1));a.download='ribofun-data.json';a.click()}
+function chk(){const n=new Date(),td=ymd(n);S.ev.forEach(e=>{if(e.d!=td||!e.t)return;const df=(new Date(td+'T'+e.t)-n)/6e4,k='e'+e.id;if(df<=S.rem&&df>-60&&!S.nt[k]){S.nt[k]=1;save();notify(e.k=='deadline'?'Deadline segera!':'Waktunya belajar',e.n+' ('+e.t+')')}});
+if(S.daily&&pad(n.getHours())+':'+pad(n.getMinutes())>=S.daily&&!mins(td)&&!S.nt['d'+td]){S.nt['d'+td]=1;save();notify('Belum belajar hari ini','Catat sesi belajarmu, sekecil apa pun.')}}
+go();chk();setInterval(chk,30000);
+</script></body></html>
